@@ -20,7 +20,7 @@ An autonomous, multi-tool AI receptionist and appointment management agent built
 | **Orchestration** | n8n (Autonomous Agent Workflow) |
 | **LLM Engine** | Groq (LLaMA 3 Model) |
 | **Database / CRM** | Airtable (Multi-Table Schema: `Appointments`, `Doctors`, `Services`) |
-| **Interface** | n8n Chat Trigger / Webhook (Web UI) |
+| **Interface** | n8n Chat Trigger |
 
 ---
 
