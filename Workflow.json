@@ -1,0 +1,389 @@
+{
+  "name": "Dental Clinic Booking Agent",
+  "nodes": [
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        -1936,
+        -208
+      ],
+      "id": "1c830560-f355-4102-b047-f850aeef1511",
+      "name": "When chat message received",
+      "webhookId": "fe2e8d01-e3a4-4f32-942a-b2ef224d8443"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput }}",
+        "options": {
+          "systemMessage": "You are a professional, polite AI receptionist for an upscale dental clinic in Cairo. CRITICAL INSTRUCTION: Whenever a user mentions a date or asks about available appointments, you MUST ALWAYS use your Airtable search tool immediately to check the schedule. Never reply with a generic greeting if the user is asking about availability—always execute the tool first, read the available slots from the data returned, and present them clearly to the user.\n\nCRITICAL OUTPUT FORMATTING: When listing available time slots to the user, ONLY present the time (e.g., '10:00 AM', '1:00 PM'). NEVER show internal database keys or Record IDs (e.g., 'recOrJXPL...') to the patient. Keep the Record ID hidden in your internal memory context so you can use it when calling the update_appointment tool later."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -1728,
+        -208
+      ],
+      "id": "928dfae9-a27d-4292-8fd4-e56ddbdfe007",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "openai/gpt-oss-120b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -1968,
+        -16
+      ],
+      "id": "e9dffe12-e221-4f6c-9504-32ab2772a1f4",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "kNFV642i7M2nSYSc",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to search and read appointment slots, check availability, and find record IDs in Airtable.",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMGv0oqsU0XLrN5",
+          "mode": "list",
+          "cachedResultName": "Dental Clinic System",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblA22uJCCr0lB6UD",
+          "mode": "list",
+          "cachedResultName": "Appointments",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5/tblA22uJCCr0lB6UD"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1712,
+        112
+      ],
+      "id": "e52c594e-5c91-4f24-8b7e-e2002df6828a",
+      "name": "Search records in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "4GK8U286aevNGDyB",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -1824,
+        0
+      ],
+      "id": "613c22ff-8561-4898-8e32-de058bf4535a",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool ONLY ONCE to finalize an appointment. Pass the record ID, set Status to 'Booked', and save the PatientName and PatientPhone. Do not call this tool repeatedly.",
+        "operation": "upsert",
+        "base": {
+          "__rl": true,
+          "value": "appMGv0oqsU0XLrN5",
+          "mode": "list",
+          "cachedResultName": "Dental Clinic System",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblA22uJCCr0lB6UD",
+          "mode": "list",
+          "cachedResultName": "Appointments",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5/tblA22uJCCr0lB6UD"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('id__using_to_match_', ``, 'string') }}",
+            "PatientName": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('PatientName', ``, 'string') }}",
+            "PatientPhone": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('PatientPhone', ``, 'string') }}",
+            "Status": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Status', ``, 'string') }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": false,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": true,
+              "removed": false
+            },
+            {
+              "id": "PatientName",
+              "displayName": "PatientName",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "PatientPhone",
+              "displayName": "PatientPhone",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "Date",
+              "displayName": "Date",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            },
+            {
+              "id": "TimeSlot",
+              "displayName": "TimeSlot",
+              "required": false,
+              "defaultMatch": false,
+              "canBeUsedToMatch": true,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1568,
+        112
+      ],
+      "id": "26c701d6-c6dc-431c-b77c-173a5db4023c",
+      "name": "Create or update a record in Airtable",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "4GK8U286aevNGDyB",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to look up dental treatments, procedures (such as cleanings, whitening, fillings), prices, and service descriptions. Always use this tool when a patient asks about treatment costs, what services the clinic offers, or details about a specific dental procedure.",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMGv0oqsU0XLrN5",
+          "mode": "list",
+          "cachedResultName": "Dental Clinic System",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblZTJs2VtYpqIfuV",
+          "mode": "list",
+          "cachedResultName": "Services",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5/tblZTJs2VtYpqIfuV"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1376,
+        -80
+      ],
+      "id": "241a72cc-4f13-4bd4-9eb2-af5cd04d0596",
+      "name": "search_services",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "4GK8U286aevNGDyB",
+          "name": "Airtable Personal Access Token account"
+        }
+      },
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Use this tool to search for clinic staff, doctor profiles, medical specialties, working days, and professional backgrounds. Always use this tool when a patient asks about specific dentists, who specializes in a certain treatment, or what days a particular doctor is available.",
+        "operation": "search",
+        "base": {
+          "__rl": true,
+          "value": "appMGv0oqsU0XLrN5",
+          "mode": "list",
+          "cachedResultName": "Dental Clinic System",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5"
+        },
+        "table": {
+          "__rl": true,
+          "value": "tblwAysE7HvTw73u9",
+          "mode": "list",
+          "cachedResultName": "Doctors",
+          "cachedResultUrl": "https://airtable.com/appMGv0oqsU0XLrN5/tblwAysE7HvTw73u9"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.airtableTool",
+      "typeVersion": 2.2,
+      "position": [
+        -1440,
+        96
+      ],
+      "id": "b7b81074-5727-4258-8e62-97a2875ef8bf",
+      "name": "search_doctors",
+      "credentials": {
+        "airtableTokenApi": {
+          "id": "4GK8U286aevNGDyB",
+          "name": "Airtable Personal Access Token account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When chat message received": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Search records in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create or update a record in Airtable": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_services": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "search_doctors": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "f469b45b-b978-4bda-9852-145ef3457931",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f55d2a753ac99bf0b4ad6a9c49f3c2ae6f13619f26ad50e302a849f686c1e62e"
+  },
+  "nodeGroups": [],
+  "id": "Ic5LRRoY0CXovvaB",
+  "tags": []
+}
