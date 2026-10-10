@@ -59,7 +59,7 @@ Create a Base called `Dental Clinic System`, then create the three tables descri
 **3. Import the workflow into n8n**
 
 1. Open n8n → **Workflows** → **Import from File**.
-2. Select `workflow.json` from this repository.
+2. Select `Workflow.json` from this repository.
 
 **4. Configure credentials**
 
