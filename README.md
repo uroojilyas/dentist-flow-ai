@@ -4,17 +4,6 @@ An autonomous, multi-tool AI receptionist and appointment management agent built
 
 ---
 
-## Table of Contents
-
-- [Features](#-features)
-- [Tech Stack](#️-tech-stack)
-- [Architecture](#-architecture)
-- [Quickstart](#-quickstart-run-in--5-minutes)
-- [Airtable Schema](#airtable-schema)
-- [Business Impact](#-business-impact)
-
----
-
 ##  Features
 
 - **Multi-Domain Intelligence:** Dynamically queries clinic services, pricing, doctor availability, and active schedules across multiple database tables.
