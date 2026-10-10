@@ -49,7 +49,7 @@ An autonomous, multi-tool AI receptionist and appointment management agent built
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/dental-ai-concierge.git
-cd dental-ai-concierge
+cd dentist-flow-ai
 ```
 
 **2. Set up Airtable**
