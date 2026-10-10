@@ -1,4 +1,4 @@
-# 🦷 Cairo Dental AI Concierge
+# Dentist Flow AI
 
 An autonomous, multi-tool AI receptionist and appointment management agent built for upscale dental clinics in Cairo. It handles patient inquiries, doctor/service matching, real-time schedule checks, and end-to-end appointment bookings directly in Airtable.
 
@@ -15,7 +15,7 @@ An autonomous, multi-tool AI receptionist and appointment management agent built
 
 ---
 
-## 🌟 Features
+##  Features
 
 - **Multi-Domain Intelligence:** Dynamically queries clinic services, pricing, doctor availability, and active schedules across multiple database tables.
 - **Autonomous Booking Engine:** Enables real-time slot selection and updates patient records with zero human intervention.
@@ -24,7 +24,7 @@ An autonomous, multi-tool AI receptionist and appointment management agent built
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -35,7 +35,7 @@ An autonomous, multi-tool AI receptionist and appointment management agent built
 
 ---
 
-## 🧩 Architecture
+##  Architecture
 
 | Component | Description |
 |---|---|
@@ -46,7 +46,7 @@ An autonomous, multi-tool AI receptionist and appointment management agent built
 
 ---
 
-## 🚀 Quickstart (Run in < 5 Minutes)
+##  Quickstart (Run in < 5 Minutes)
 
 ### Prerequisites
 
@@ -96,7 +96,7 @@ Create a Base called `Dental Clinic System`, then create the three tables descri
 
 ---
 
-## 📈 Business Impact
+##  Business Impact
 
 - **15+ Hours Saved per Week:** Eliminates repetitive phone/chat receptionist tasks.
 - **$1,200/Month Cost Reduction:** Replaces late-night, off-hours staffing needs.
